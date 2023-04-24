@@ -43,7 +43,7 @@ export default function DefaultLayout(){
                     user.role != 1 &&
                     <>
                         <Link to="/users">Kullanıcılar</Link>
-                        <Link to="/contentmanagement">İçerik Yönetimi</Link>
+                      
                     </>
 
                 }
