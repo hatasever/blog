@@ -55,13 +55,13 @@ class userController extends Controller
         $user->unguard(true);
         $user->update($data);
         return new userResource($user);
-              # code...
+
             }
             else
             {
                 return response(array(
                    "error" => array("permition_error" => "Bu alana erişim yetkiniz bulunmuyor.")
-                ), 403)
+                ), 403);
             }
     }
 

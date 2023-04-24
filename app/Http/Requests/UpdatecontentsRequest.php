@@ -21,10 +21,10 @@ class UpdatecontentsRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
             "title" => array("max:255","string","required"),
             "content" => array("string","required"),
-            "file"    => array("image","mimes:jpg,png,jpeg,gif,svg","max:2048"),
             "published" => array("boolean","required"),
             "publish_date" => array("date")
         ];

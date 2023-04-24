@@ -35,31 +35,35 @@ export default function DefaultLayout(){
        }
 
     return (
-        <div id="defaultLayout">
+        <div className="container-fluid" id="defaultLayout" style={{position:"fixed"}}>
+
             <aside>
+            <div style={{height:'80px', minHeight:'80px', marginBottom:"20px"}}>
+
+            </div>
+
                 <Link to="/dashboard">Anasayfa</Link>
                 {
 
                     user.role != 1 &&
                     <>
                         <Link to="/users">Kullanıcılar</Link>
-                        <Link to="/contentmanagement">İçerik Yönetimi</Link>
                     </>
 
                 }
-                <Link to="/contents">İçerikler</Link>
+                <Link to="/contents">İçeriklerim</Link>
 
 
             </aside>
             <div className="content">
                 <header>
-                    <div>
-                        Header
+                    <div style={{minWidth:'50px'}}>
+
                     </div>
-                    <div>{user.name} <Link onClick={logout}>Çıkış Yap</Link></div>
+                    <div style={{marginRight:'1px'}}>{user.name} <Link onClick={logout}>Çıkış Yap</Link></div>
 
                 </header>
-                <div className="container">
+                <div className="container" style={{overflowX:'scroll', maxHeight:'85vh'}}>
                     <Outlet />
                 </div>
             </div>

@@ -32,7 +32,6 @@ class contentController extends Controller
      */
     public function store(StorecontentsRequest $request)
     {
-        $data = $request->validated();
 
         $cont = $request->validated();
 
@@ -74,13 +73,14 @@ class contentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatecontentsRequest $request, contents $contents)
+    public function update(UpdatecontentsRequest $request, contents $content)
     {
-        if (auth()->user()->id == $contents->id || auth()->user()->role > 1) {
+        if (auth()->user()->id == $content->id || auth()->user()->role > 1) {
 
             $cont = $request->validated();
 
-            $original_name = strtolower(str_replace(' ','_',$cont["file"]->getClientOriginalName()));
+            if (isset($cont["file"]))
+            {$original_name = strtolower(str_replace(' ','_',$cont["file"]->getClientOriginalName()));
 
 
             $ext = explode('.',$original_name);
@@ -93,10 +93,10 @@ class contentController extends Controller
                 'uploads/' , $cont["file"],  $file_name
               );
 
-              $cont["file"] =  'uploads/' . $file_name;
+              $cont["file"] =  'uploads/' . $file_name;}
 
-            $contents->update($cont);
-            return new contentResource($contents);
+            $content->update($cont);
+            return new contentResource($content);
 
         }
         else
@@ -183,6 +183,13 @@ class contentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+     public function myContent(Request $request)
+     {
+        contents::unguard();
+        return  contents::query()->where('author', auth()->user()->id)->orderBy('publish_date', 'DESC')->with('authorSelf')->paginate(9);
+
+     }
     public function destroy(contents $contents)
     {
         if (auth()->user()->role > 1) {

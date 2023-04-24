@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useParams } from "react-router-dom";
 import axiosClient from "../axiosClient";
 
@@ -8,13 +8,15 @@ export default function formContent(){
     const [loading, setLoading] = useState(false)
     const [errors,setErrors] = useState(null);
     const [publish, setPublish] = useState(true);
+    const hiddenArea = useRef();
+    const check = useRef();
     const [content, setContent] = useState({
         id: null,
         title:'',
         content:'',
-        file:'null',
         published:'',
-        publish_date:'null'
+        publish_date:'null',
+
 
     });
 
@@ -26,7 +28,11 @@ export default function formContent(){
 
             axiosClient.get(`/contents/${id}`).then(({data})=>{
                 console.log(data);
-                setContent(data.data);
+                let dts = data.data;
+
+                dts.file = null;
+                setContent(dts);
+
 
             }).catch(err=>{
                 console.log(err)
@@ -40,10 +46,9 @@ export default function formContent(){
 
     if (id) {
 
+            axiosClient.put(`/contents/${id}`, content).then(({data})=>{
 
-            axiosClient.put(`/contents/${id}`).then(({data})=>{
-                console.log(data);
-                setContent(data.data);
+                console.log(data)
 
             }).catch(err=>{
                 console.log(err)
@@ -72,9 +77,12 @@ export default function formContent(){
     }
     return (
         <div>
-            {content.id && <h1>İçerik Düzenleme</h1>}
-            { !content.id && <h1>Yeni İçerik</h1>}
-            <div className="card" style={{display:'flex'}}>
+            {content.id && <h1 className="my-2">İçerik Düzenleme</h1>}
+            { !content.id && <h1 className="my-2">Yeni İçerik</h1>}
+            <div className="card" >
+
+                <div className="card-body">
+
                 {loading && <div className="text-center">
                     Yükleniyor..
                     </div>}
@@ -95,12 +103,12 @@ export default function formContent(){
                                 <label htmlFor="chk" style={{width:"100%"}}>İleri bir tarihte paylaş</label>
 
 
-                                <input type="checkbox"  name="publish" id="chk"  checked={content.published ? "checked" : 'unChecked'}   onChange={(ev) => { (!ev.target.checked ? document.getElementById("date").style.display ='none' : document.getElementById("date").style.display = 'inherit'  );  setContent({...content,published:(ev.target.checked == true ? 1 : 0) }) }}  />
+                                <input type="checkbox" ref={check} name="publish" id="chk"  checked={content.published ? "checked" : ''}   onChange={(ev) => { (console.log(ev.target.checked));(!ev.target.checked ? document.getElementById("date").style.display = 'none' : document.getElementById("date").style.display = 'inherit'  );  setContent({...content,published:(ev.target.checked == true ? 1 : 0) }) }}  />
                                 </div>
-                                {publish &&
 
-                                <input  value={content.publish_date} type="date" style={{display:'none'}} id="date" onChange={(ev) => { setContent({...content,publish_date:ev.target.value}) }} />
-                                }
+
+                               { <input ref={hiddenArea}  value={content.publish_date} type="date" style={{display:'none'}} id="date" onChange={(ev) => { setContent({...content,publish_date:ev.target.value}) }} />
+}
 
                                 <input type="submit" className="btn-add" />
                             </form>
@@ -111,6 +119,8 @@ export default function formContent(){
 
                         <img id="imgs" src=""/>
                         </div>
+                </div>
+
 
             </div>
         </div>

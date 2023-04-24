@@ -75,7 +75,7 @@ export default function Users(){
 
 
     return (
-        <div>
+        <div className="p-2">
 
             <div style={{'display':'flex',  'justifyContent':'spaceBetween', 'alignItems': 'center'}}>
                 <h3>Kullanıcılar</h3>
@@ -112,7 +112,7 @@ export default function Users(){
                                     <td>{u.email}</td>
                                     <td>{u.created_at}</td>
                                     <td>
-                                            <button className={u.status == 1 ? 'btn btn-delete' : 'btn btn-add'} onClick={event => changeStatus(event,u)}>{u.status == 1 ? 'Yasakla' : 'Erişim İzni Ver'} {u.status}</button>
+                                            <button className={u.status == 1 ? 'btn btn-delete' : 'btn btn-add'} onClick={event => changeStatus(event,u)}>{u.status == 1 ? 'Yasakla' : 'Erişim İzni Ver'}</button>
                                     </td>
                                 </tr>
                             ))
@@ -120,7 +120,7 @@ export default function Users(){
                     </tbody>
                     }
                 </table>
-                <div>
+                <div className="my-2 w-100 d-flex justify-content-center">
 
                     <button className='btn btn-add' disabled={currentPage == 1 ? true : false} style={{marginRight:'5px'}} key={'pagination_first'} onClick={event => getUsers(1)}> <FontAwesomeIcon icon={faArrowLeft} /> </button>
 

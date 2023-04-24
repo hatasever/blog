@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->group( function(){
     Route::apiResource('/contents', \App\Http\Controllers\Api\contentController::class);
     Route::POST('/contents/remove', [\App\Http\Controllers\Api\contentController::class, "deleteComment"] );
     Route::POST('/contents/addComment', [\App\Http\Controllers\Api\contentController::class, "addComment"] );
+    Route::GET('/mycontent', [\App\Http\Controllers\Api\contentController::class, "myContent"] );
 });
 
 
