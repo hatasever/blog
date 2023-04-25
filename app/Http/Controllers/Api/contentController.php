@@ -190,10 +190,11 @@ class contentController extends Controller
         return  contents::query()->where('author', auth()->user()->id)->orderBy('publish_date', 'DESC')->with('authorSelf')->paginate(9);
 
      }
-    public function destroy(contents $contents)
+    public function destroy(contents $content)
     {
         if (auth()->user()->role > 1) {
-            $contents->delete();
+
+            $content->delete();
 
             return response('', 204);
         }

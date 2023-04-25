@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react"
 import { useParams } from "react-router-dom";
 import axiosClient from "../axiosClient";
+import { toast } from 'react-toastify';
 
 export default function formContent(){
     const {id} = useParams(null);
@@ -10,6 +11,7 @@ export default function formContent(){
     const [publish, setPublish] = useState(true);
     const hiddenArea = useRef();
     const check = useRef();
+    const navigate = useNavigate();
     const [content, setContent] = useState({
         id: null,
         title:'',
@@ -37,6 +39,21 @@ export default function formContent(){
             }).catch(err=>{
                 console.log(err)
                 setLoading(false)
+                let response = err.response;
+                if (response && response.status === 422) {
+
+                    if (response.data.errors) {
+                        setErrors(response.data.errors);
+                    }
+                    else
+                    {
+                        setErrors({
+                            auth : [response.data.message]
+                        })
+                    }
+
+
+                }
             })
         },[])
     }
@@ -50,9 +67,31 @@ export default function formContent(){
 
                 console.log(data)
 
+                toast.success("Başarı ile güncellendi")
+
             }).catch(err=>{
                 console.log(err)
                 setLoading(false)
+                toast.error("Hata oluştu!")
+                let response = err.response;
+
+
+                if (response && response.status === 422) {
+
+                    if (response.data.errors) {
+                        setErrors(response.data.errors);
+                    }
+                    else
+                    {
+                        setErrors({
+                            auth : [response.data.message]
+                        })
+                    }
+
+
+                }
+
+
             })
     }else
     {
@@ -60,8 +99,12 @@ export default function formContent(){
 
 
              axiosClient.post(`/contents`, content, {headers: { "Content-Type": "multipart/form-data" }}).then((res)=>{
-                console.log(res);
-                // setContent(res);
+
+                 setContent(res);
+
+                 toast.success("Başarı ile eklendi.")
+
+                 navigate('/contents')
 
              }).catch(err=>{
                  console.log(err)

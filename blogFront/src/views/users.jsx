@@ -6,6 +6,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { useStateContext } from "../context/contextProvider";
 import { Navigate } from "react-router-dom";
 import paginate from "../pagination"
+import { toast } from 'react-toastify';
 
 export default function Users(){
     const [users,setUsers] = useState([]);
@@ -65,7 +66,7 @@ export default function Users(){
 
     console.log(u);
     axiosClient.put(`/users/${u.id}`, u).then((res)=>{
-        console.log(res)
+        toast.success("Kullanıcı başarı ile güncellendi.")
     }).catch(err => {
         console.log(err)
     })

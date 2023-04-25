@@ -5,6 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { useStateContext } from "../context/contextProvider";
+import { toast } from 'react-toastify';
+
+
 
 export default function contentdetails(){
 
@@ -66,6 +69,11 @@ export default function contentdetails(){
         axiosClient.post('/contents/addComment', data).then((res)=> {
             console.log(res);
         }).catch(err=> {
+            let response = err.response;
+
+            response.map(er => {
+                toast.error(er);
+            })
 
         })
 
@@ -75,7 +83,24 @@ export default function contentdetails(){
         navigate('/formContent/'+id)
     }
     const deleteFun = () => {
-        console.log("delete")
+
+        axiosClient.delete(`/contents/${id}`).then(({data}) => {
+
+            toast.success("Silme Başarılı!");
+            navigate('/contents');
+        }).catch(
+            err => {
+              console.log(err)
+
+              let response = err.response;
+              response.map((err)=>{
+                toast.error(err)
+              } )
+
+
+            }
+        )
+
     }
     return (
         <div className="container">
